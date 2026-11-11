@@ -11,10 +11,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      
       - name: Extract Android source
         run: |
+          ZIP_FILE="$(find . -maxdepth 1 -type f -iname '*.zip' -print -quit)"
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Khong tim thay file ZIP"
+            ls -la
+            exit 1
+          fi
+          echo "Dang giai nen: $ZIP_FILE"
           mkdir -p /tmp/megoicon
-          unzip Me_Goi_Con_Free_Spark_Phone_Build.zip -d /tmp/megoicon
+          unzip "$ZIP_FILE" -d /tmp/megoicon
           cp -a /tmp/megoicon/. .
 
       - name: Setup Java
