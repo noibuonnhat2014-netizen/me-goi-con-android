@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574440084089",
+    "project_id": "megoicon-d5104",
+    "storage_bucket": "megoicon-d5104.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574440084089:android:734946a6741b630a323aa8",
+        "android_client_info": {
+          "package_name": "vn.megoi.con"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBDnVZoYDWmixWzDYeG2yho4jWypJSjFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
