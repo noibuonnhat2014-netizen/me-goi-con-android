@@ -1,4 +1,3 @@
-
 name: Build Me Goi Con APK
 
 on:
@@ -7,14 +6,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Extract Android source
         run: |
+          ZIP_FILE="$(find . -maxdepth 1 -type f -iname '*.zip' -print -quit)"
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Cannot find source ZIP"
+            ls -la
+            exit 1
+          fi
           mkdir -p /tmp/megoicon
-          unzip Me_Goi_Con_Free_Spark_Phone_Build.zip -d /tmp/megoicon
+          unzip "$ZIP_FILE" -d /tmp/megoicon
           cp -a /tmp/megoicon/. .
 
       - name: Setup Java
@@ -23,11 +29,19 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(find "$ANDROID_HOME" -type f -name sdkmanager | head -n 1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "Cannot find sdkmanager"
+            exit 1
+          fi
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses || true
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -42,3 +56,4 @@ jobs:
         with:
           name: Me-Goi-Con-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
